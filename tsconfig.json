@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "outDir": "dist/",
+        "target": "es5",
+        "lib": [
+            "es2015"
+        ],
+        "noImplicitAny": false,
+        "noImplicitThis": false,
+        "alwaysStrict": true,
+        "strictBindCallApply": true,
+        "strictFunctionTypes": true,
+        "declaration": true,
+        "sourceMap": true,
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true
+    },
+    "include": ["src/"]
+}
