@@ -176,6 +176,12 @@ function renderInternal(node: Node, options: RenderOptions, indentation: number)
         result += `${indentString}</html>`;
         return result;
     }
+    else if (node.name == HEAD) {
+        return "";
+    }
+    else if (node.name == CASE || node.name == DEFAULT) {
+        return renderInternal(node.children, options, indentation);
+    }
     else {
         const selfClose = node.children.length == 0 && (options.useSelfCloseTags == true || (options.useSelfCloseTags instanceof Array && options.useSelfCloseTags.includes(node.name as string)));
 
