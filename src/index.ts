@@ -150,18 +150,27 @@ function renderInternal(node: Node, options: RenderOptions, indentation: number)
     }
     else if (node.name == HTML) {
         const indentString = createIndent(options, indentation);
+        const children = [...node.children];
+
+        let index = children.findIndex(n => n instanceof Element && n.name == HEAD);
+        let head: Node[];
+        if (index == -1) head = [];
+        else {
+            head = (children[index] as Element).children;
+            children.splice(index, 1);
+        }
 
         let result = `${indentString}<!DOCTYPE html>${options.indent ? "\n" : ""}`;
 
-        result += `${indentString}<html${createAttrs(node.props)}>${options.indent ? "\n" : ""}`;
+        result += `${indentString}<html>${options.indent ? "\n" : ""}`;
 
-        result += `${indentString}<head${createAttrs(node.props.head ?? {})}>${options.indent ? "\n" : ""}`;
-
+        result += `${indentString}<head>${options.indent ? "\n" : ""}`;
+        result += renderInternal(head, options, indentation + 1) + (options.indent && head.length > 0 ? "\n" : "");
         result += `${indentString}</head>${options.indent ? "\n" : ""}`;
 
-        result += `${indentString}<body${createAttrs(node.props.body ?? {})}>${options.indent ? "\n" : ""}`;
-        result += node.children.map(n => renderInternal(n, options, indentation + 1)).join(options.indent ? "\n" : "");
-        if (node.children.length > 0 && options.indent) result += "\n";
+        result += `${indentString}<body>${options.indent ? "\n" : ""}`;
+        result += children.map(n => renderInternal(n, options, indentation + 1)).join(options.indent ? "\n" : "");
+        if (children.length > 0 && options.indent) result += "\n";
         result += `${indentString}</body>${options.indent ? "\n" : ""}`;
 
         result += `${indentString}</html>`;
@@ -180,7 +189,7 @@ function renderInternal(node: Node, options: RenderOptions, indentation: number)
             if (node.children.length > 0 && options.indent) result += "\n";
             result += node.children.map(n => renderInternal(n, options, indentation + 1)).join(options.indent ? "\n" : "");
             if (node.children.length > 0 && options.indent) result += `\n${indentString}`;
-            result += `${indentString}</${node.name as string}>`;
+            result += `</${node.name as string}>`;
         }
 
         return result;
@@ -261,7 +270,7 @@ export const Fragment = Symbol("Fragment");
 /**
  * Element for an HTML page (including DOCTYPE, head and body).
  */
-export const HtmlPage: ElementGenerator<{ [key: string]: any, head?: Props, body?: Props, status?: number }> = (props, children) => {
+export const HtmlPage: ElementGenerator<{ [key: string]: any, status?: number }> = (props, children) => {
     return new Element(HTML, props, children);
 }
 const HTML = Symbol("HTML");
@@ -294,6 +303,10 @@ export const Default: ElementGenerator<{}> = (_, children) => {
 const CASE = Symbol("Case");
 const DEFAULT = Symbol("Default");
 
+export const Head: ElementGenerator = (props, children) => {
+    return new Element(HEAD, props, children);
+}
+const HEAD = Symbol("Head");
 
 /**
  * Element attributes/properties type.
