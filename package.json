@@ -5,9 +5,10 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
+    "build:test": "tsc --build ./examples/tsconfig.examples.json",
     "prepublish": "npm run build",
-    "test": "tsc --build ./examples/tsconfig.examples.json && node ./dist/test/index.js",
-    "test-express": "tsc --build ./examples/tsconfig.examples.json && node ./dist/test/express.js"
+    "test": "npm run build:test && node ./dist/test/index.js",
+    "test:express": "npm run build:test && node ./dist/test/express.js"
   },
   "repository": {
     "type": "git",
