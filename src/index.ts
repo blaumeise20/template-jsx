@@ -83,7 +83,7 @@ export class Element {
      * @param props The properties/attributes assigned to the element.
      * @param children Children of the element.
      */
-    constructor(public name: string | Fragment | typeof Html | typeof CASE | typeof DEFAULT, public props: Props, children: Node[]) {
+    constructor(public name: string | Fragment | typeof HTML | typeof CASE | typeof DEFAULT | typeof HEAD, public props: Props, children: Node[]) {
         this.children = flatten(children);
     }
 }
@@ -148,7 +148,7 @@ function renderInternal(node: Node, options: RenderOptions, indentation: number)
     else if (node.name == Fragment) {
         return node.children.map(n => renderInternal(n, options, indentation)).join(options.indent ? "\n" : "");
     }
-    else if (node.name == Html) {
+    else if (node.name == HTML) {
         const indentString = createIndent(options, indentation);
 
         let result = `${indentString}<!DOCTYPE html>${options.indent ? "\n" : ""}`;
@@ -225,14 +225,14 @@ export function create(options: RenderOptions = {}): ExpressRenderer {
     ];
     let renderer: ExpressRenderer = Object.assign(
         function (top: Element) {
-            if (top.name != Html) top = new Element(Html, {}, [top]);
+            if (top.name != HTML) top = new Element(HTML, {}, [top]);
             return render(top, options);
         },
         {
             createHandler(component: ElementGenerator<{ req, res }>, status?: number) {
                 return (req, res) => {
                     let element = createElement(component, { req, res });
-                    if (element.name != Html) element = new Element(Html, {}, [element]);
+                    if (element.name != HTML) element = new Element(HTML, {}, [element]);
 
                     let actualStatus;
                     if (status != null) {
@@ -262,9 +262,9 @@ export const Fragment = Symbol("Fragment");
  * Element for an HTML page (including DOCTYPE, head and body).
  */
 export const HtmlPage: ElementGenerator<{ [key: string]: any, head?: Props, body?: Props, status?: number }> = (props, children) => {
-    return new Element(Html, props, children);
+    return new Element(HTML, props, children);
 }
-const Html = Symbol("HTML");
+const HTML = Symbol("HTML");
 
 /**
  * Helper component for conditional elements.
