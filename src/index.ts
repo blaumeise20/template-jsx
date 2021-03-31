@@ -211,7 +211,7 @@ function createIndent(options: RenderOptions, indentation: number): string {
 
 function createAttrs(props: Props) {
     const attrKeys = Object.keys(props);
-    const attrs = [];
+    const attrs: string[] = [];
     attrKeys.forEach(k => {
         attrs.push(` ${k}="${props[k]}"`);
     });
@@ -244,8 +244,8 @@ export function create(options: RenderOptions = {}): ExpressRenderer {
             return render(top, options);
         },
         {
-            createHandler(component: ElementGenerator<{ req, res }>, status?: number) {
-                return (req, res) => {
+            createHandler(component: ElementGenerator<{ req: ExpressRequest, res: ExpressResponse }>, status?: number) {
+                return (req: ExpressRequest, res: ExpressResponse) => {
                     let element = createElement(component, { req, res });
                     if (element.name != HTML) element = new Element(HTML, {}, [element]);
 
@@ -335,8 +335,9 @@ export type ElementGenerator<T extends Props = {}> = (props: T, children: Node[]
  */
 export interface ExpressRenderer {
     (top: Element): string;
-    createHandler(component: ElementGenerator<{ req, res }>, status?: number): (req, res) => void;
+    createHandler(component: ElementGenerator<{ req: ExpressRequest, res: ExpressResponse }>, status?: number): (req: ExpressRequest, res: ExpressResponse) => void;
 }
+import type { Request as ExpressRequest, Response as ExpressResponse } from "express";
 
 export default {
     createElement,
