@@ -339,6 +339,12 @@ export interface ExpressRenderer {
 }
 import type { Request as ExpressRequest, Response as ExpressResponse } from "express";
 
+declare namespace JSX {
+    interface IntrinsicElements {
+        [key: string]: Element;
+    }
+}
+
 export default {
     createElement,
     Element,
