@@ -186,6 +186,9 @@ function renderInternal(node: Node, options: RenderOptions, indentation: number)
         const selfClose = node.children.length == 0 && (options.useSelfCloseTags == true || (options.useSelfCloseTags instanceof Array && options.useSelfCloseTags.includes(node.name as string)));
 
         if (node.props.className && !node.props.class) node.props.class = node.props.className;
+        const props = { ...node.props };
+        if (props.className && !props.class) props.class = props.className;
+        delete props.className;
         const attrs = createAttrs(node.props);
 
         const indentString = createIndent(options, indentation);
@@ -213,7 +216,7 @@ function createAttrs(props: Props) {
     const attrKeys = Object.keys(props);
     const attrs: string[] = [];
     attrKeys.forEach(k => {
-        attrs.push(` ${k}="${props[k]}"`);
+        attrs.push(" " + k + (props[k] === true ? "" : `="${props[k]}"`));
     });
     return attrs.join("");
 }
