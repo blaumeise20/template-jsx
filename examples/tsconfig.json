@@ -1,0 +1,12 @@
+{
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {
+        "outDir": "../dist/test",
+        "jsx": "react",
+        "jsxFactory": "jsxt.createElement",
+        "jsxFragmentFactory": "jsxt.Fragment",
+        "noImplicitAny": true,
+        "declaration": false
+    },
+    "include": ["."]
+}

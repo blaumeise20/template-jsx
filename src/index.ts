@@ -10,7 +10,11 @@
  * @param children Children of the element.
  * @returns The created element.
  */
-export function createElement(name: string, props: Props, ...children: Node[]): Element;
+export function createElement(
+    name: string,
+    props: Props,
+    ...children: Node[]
+): Element;
 /**
  * Creates a new JSX fragment.
  *
@@ -38,7 +42,11 @@ export function createElement(name: string, props: Props, ...children: Node[]): 
  * @param children The elements in the fragment.
  * @returns The newly created fragment.
  */
-export function createElement(name: Fragment, props: Props, ...children: Node[]): Element;
+export function createElement(
+    name: Fragment,
+    props: Props,
+    ...children: Node[]
+): Element;
 /**
  * Calls the generator function with the corresponding data and returns the generated element.
  * @example
@@ -56,18 +64,24 @@ export function createElement(name: Fragment, props: Props, ...children: Node[])
  * @param children Children passed to the element generator.
  * @returns The created element.
  */
-export function createElement<T extends Props>(generator: ElementGenerator<T>, props: T, ...children: Node[]): Element;
+export function createElement<T extends Props>(
+    generator: ElementGenerator<T>,
+    props: T,
+    ...children: Node[]
+): Element;
 /**
  * Implementation.
  */
-export function createElement(nameOrGenerator: any, props: any, ...children: Node[]): any {
+export function createElement(
+    nameOrGenerator: any,
+    props: any,
+    ...children: Node[]
+): any {
     if (typeof nameOrGenerator == "function") {
         return nameOrGenerator(props ?? {}, children);
-    }
-    else if (nameOrGenerator == Fragment) {
+    } else if (nameOrGenerator == Fragment) {
         return new Element(Fragment, {}, children);
-    }
-    else {
+    } else {
         return new Element(nameOrGenerator, props ?? {}, children);
     }
 }
@@ -83,16 +97,27 @@ export class Element {
      * @param props The properties/attributes assigned to the element.
      * @param children Children of the element.
      */
-    constructor(public name: string | Fragment | typeof HTML | typeof CASE | typeof DEFAULT | typeof HEAD, public props: Props, children: Node[]) {
+    constructor(
+        public name:
+            | string
+            | Fragment
+            | typeof HTML
+            | typeof CASE
+            | typeof DEFAULT
+            | typeof HEAD,
+        public props: Props,
+        children: Node[]
+    ) {
         this.children = flatten(children);
     }
 }
 
 function flatten(children: Node[]) {
     const result: Node[] = [];
-    children.forEach(c => {
+    children.forEach((c) => {
         if (c instanceof Array) result.push(...flatten(c));
-        else if (c instanceof Element && c.name == Fragment) result.push(...flatten(c.children));
+        else if (c instanceof Element && c.name == Fragment)
+            result.push(...flatten(c.children));
         else result.push(c);
     });
     return result;
@@ -104,13 +129,17 @@ function flatten(children: Node[]) {
  * @param options Options to use for rendering.
  * @param indentation The starting indentation level. Only used when options.indent is set to `true`.
  */
-export function render(top: Element, options: RenderOptions = {}, indentation: number = 0) {
+export function render(
+    top: Element,
+    options: RenderOptions = {},
+    indentation: number = 0
+) {
     options = {
         indent: false,
         indentString: "",
         indentSize: 4,
         useSelfCloseTags: true,
-        ...options
+        ...options,
     };
     return renderInternal(top, options, indentation);
 }
@@ -137,22 +166,28 @@ export interface RenderOptions {
     useSelfCloseTags?: boolean | string[];
 }
 
-
-function renderInternal(node: Node, options: RenderOptions, indentation: number): string {
+function renderInternal(
+    node: Node,
+    options: RenderOptions,
+    indentation: number
+): string {
     if (typeof node == "string") {
         return createIndent(options, indentation) + node;
-    }
-    else if (node instanceof Array) {
-        return node.map(n => renderInternal(n, options, indentation)).join(options.indent ? "\n" : "");
-    }
-    else if (node.name == Fragment) {
-        return node.children.map(n => renderInternal(n, options, indentation)).join(options.indent ? "\n" : "");
-    }
-    else if (node.name == HTML) {
+    } else if (node instanceof Array) {
+        return node
+            .map((n) => renderInternal(n, options, indentation))
+            .join(options.indent ? "\n" : "");
+    } else if (node.name == Fragment) {
+        return node.children
+            .map((n) => renderInternal(n, options, indentation))
+            .join(options.indent ? "\n" : "");
+    } else if (node.name == HTML) {
         const indentString = createIndent(options, indentation);
         const children = [...node.children];
 
-        let index = children.findIndex(n => n instanceof Element && n.name == HEAD);
+        let index = children.findIndex(
+            (n) => n instanceof Element && n.name == HEAD
+        );
         let head: Node[];
         if (index == -1) head = [];
         else {
@@ -160,44 +195,57 @@ function renderInternal(node: Node, options: RenderOptions, indentation: number)
             children.splice(index, 1);
         }
 
-        let result = `${indentString}<!DOCTYPE html>${options.indent ? "\n" : ""}`;
+        let result = `${indentString}<!DOCTYPE html>${
+            options.indent ? "\n" : ""
+        }`;
 
         result += `${indentString}<html>${options.indent ? "\n" : ""}`;
 
         result += `${indentString}<head>${options.indent ? "\n" : ""}`;
-        result += renderInternal(head, options, indentation + 1) + (options.indent && head.length > 0 ? "\n" : "");
+        result +=
+            renderInternal(head, options, indentation + 1) +
+            (options.indent && head.length > 0 ? "\n" : "");
         result += `${indentString}</head>${options.indent ? "\n" : ""}`;
 
         result += `${indentString}<body>${options.indent ? "\n" : ""}`;
-        result += children.map(n => renderInternal(n, options, indentation + 1)).join(options.indent ? "\n" : "");
+        result += children
+            .map((n) => renderInternal(n, options, indentation + 1))
+            .join(options.indent ? "\n" : "");
         if (children.length > 0 && options.indent) result += "\n";
         result += `${indentString}</body>${options.indent ? "\n" : ""}`;
 
         result += `${indentString}</html>`;
         return result;
-    }
-    else if (node.name == HEAD) {
+    } else if (node.name == HEAD) {
         return "";
-    }
-    else if (node.name == CASE || node.name == DEFAULT) {
+    } else if (node.name == CASE || node.name == DEFAULT) {
         return renderInternal(node.children, options, indentation);
-    }
-    else {
-        const selfClose = node.children.length == 0 && (options.useSelfCloseTags == true || (options.useSelfCloseTags instanceof Array && options.useSelfCloseTags.includes(node.name as string)));
+    } else {
+        const selfClose =
+            node.children.length == 0 &&
+            (options.useSelfCloseTags == true ||
+                (options.useSelfCloseTags instanceof Array &&
+                    options.useSelfCloseTags.includes(node.name as string)));
 
-        if (node.props.className && !node.props.class) node.props.class = node.props.className;
+        if (node.props.className && !node.props.class)
+            node.props.class = node.props.className;
         const props = { ...node.props };
         if (props.className && !props.class) props.class = props.className;
         delete props.className;
         const attrs = createAttrs(node.props);
 
         const indentString = createIndent(options, indentation);
-        let result = `${indentString}<${node.name as string}${attrs}${selfClose ? " /" : ""}>`;
+        let result = `${indentString}<${node.name as string}${attrs}${
+            selfClose ? " /" : ""
+        }>`;
 
         if (!selfClose) {
             if (node.children.length > 0 && options.indent) result += "\n";
-            result += node.children.map(n => renderInternal(n, options, indentation + 1)).join(options.indent ? "\n" : "");
-            if (node.children.length > 0 && options.indent) result += `\n${indentString}`;
+            result += node.children
+                .map((n) => renderInternal(n, options, indentation + 1))
+                .join(options.indent ? "\n" : "");
+            if (node.children.length > 0 && options.indent)
+                result += `\n${indentString}`;
             result += `</${node.name as string}>`;
         }
 
@@ -207,69 +255,75 @@ function renderInternal(node: Node, options: RenderOptions, indentation: number)
 
 function createIndent(options: RenderOptions, indentation: number): string {
     if (!options.indent) return "";
-    if (options.indentString != "") return options.indentString.repeat(indentation);
-    if (options.indentSize != 0) return " ".repeat(indentation * options.indentSize);
+    if (options.indentString != "")
+        return options.indentString.repeat(indentation);
+    if (options.indentSize != 0)
+        return " ".repeat(indentation * options.indentSize);
     return "";
 }
 
 function createAttrs(props: Props) {
     const attrKeys = Object.keys(props);
     const attrs: string[] = [];
-    attrKeys.forEach(k => {
+    attrKeys.forEach((k) => {
         attrs.push(" " + k + (props[k] === true ? "" : `="${props[k]}"`));
     });
     return attrs.join("");
 }
 
-
 export function create(options: RenderOptions = {}): ExpressRenderer {
-    if (options.useSelfCloseTags == null) options.useSelfCloseTags = [
-        "area",
-        "base",
-        "br",
-        "col",
-        "embed",
-        "hr",
-        "img",
-        "input",
-        "link",
-        "input",
-        "link",
-        "meta",
-        "param",
-        "source",
-        "track",
-        "wbr"
-    ];
+    if (options.useSelfCloseTags == null)
+        options.useSelfCloseTags = [
+            "area",
+            "base",
+            "br",
+            "col",
+            "embed",
+            "hr",
+            "img",
+            "input",
+            "link",
+            "input",
+            "link",
+            "meta",
+            "param",
+            "source",
+            "track",
+            "wbr",
+        ];
     let renderer: ExpressRenderer = Object.assign(
         function (top: Element) {
             if (top.name != HTML) top = new Element(HTML, {}, [top]);
             return render(top, options);
         },
         {
-            createHandler(component: ElementGenerator<{ req: ExpressRequest, res: ExpressResponse }>, status?: number) {
+            createHandler(
+                component: ElementGenerator<{
+                    req: ExpressRequest;
+                    res: ExpressResponse;
+                }>,
+                status?: number
+            ) {
                 return (req: ExpressRequest, res: ExpressResponse) => {
                     let element = createElement(component, { req, res });
-                    if (element.name != HTML) element = new Element(HTML, {}, [element]);
+                    if (element.name != HTML)
+                        element = new Element(HTML, {}, [element]);
 
                     let actualStatus;
                     if (status != null) {
                         actualStatus = status;
-                    }
-                    else if (typeof element.props.status == "number") {
+                    } else if (typeof element.props.status == "number") {
                         actualStatus = element.props.status;
-                    }
-                    else {
+                    } else {
                         actualStatus = 200;
                     }
                     res.status(actualStatus).send(renderer(element));
                 };
-            }
+            },
         }
     );
     return renderer;
 }
-
 
 /**
  * Symbol indicating that the element is a fragment.
@@ -279,9 +333,12 @@ export const Fragment = Symbol("Fragment");
 /**
  * Element for an HTML page (including DOCTYPE, head and body).
  */
-export const HtmlPage: ElementGenerator<{ [key: string]: any, status?: number }> = (props, children) => {
+export const HtmlPage: ElementGenerator<{
+    [key: string]: any;
+    status?: number;
+}> = (props, children) => {
     return new Element(HTML, props, children);
-}
+};
 const HTML = Symbol("HTML");
 
 /**
@@ -290,63 +347,73 @@ const HTML = Symbol("HTML");
 export const If: ElementGenerator<{ cond: boolean }> = ({ cond }, children) => {
     if (cond) return new Element(Fragment, {}, children);
     else return new Element(Fragment, {}, []);
-}
+};
 /**
  * Helper component for multiple case szenarios.
  */
 export const Switch: ElementGenerator<{ expr: any }> = ({ expr }, children) => {
-    const found = children.find(c => c instanceof Element && c.name == CASE && c.props.c == expr) as Element;
+    const found = children.find(
+        (c) => c instanceof Element && c.name == CASE && c.props.c == expr
+    ) as Element;
     if (found) return new Element(Fragment, {}, found.children);
 
-    const def = children.find(c => c instanceof Element && c.name == DEFAULT) as Element;
+    const def = children.find(
+        (c) => c instanceof Element && c.name == DEFAULT
+    ) as Element;
     if (def) return new Element(Fragment, {}, def.children);
 
     return new Element(Fragment, {}, []);
 };
 export const Case: ElementGenerator<{ c: any }> = ({ c }, children) => {
     return new Element(CASE, { c }, children);
-}
+};
 export const Default: ElementGenerator<{}> = (_, children) => {
     return new Element(DEFAULT, {}, children);
-}
+};
 const CASE = Symbol("Case");
 const DEFAULT = Symbol("Default");
 
 export const Head: ElementGenerator = (props, children) => {
     return new Element(HEAD, props, children);
-}
+};
 const HEAD = Symbol("Head");
 
 /**
  * Element attributes/properties type.
  */
 export type Props = { [key: string]: any };
- /**
-  * Type for an element fragment.
-  */
+/**
+ * Type for an element fragment.
+ */
 export type Fragment = typeof Fragment;
- /**
-  * Node (JSX element like text, elements, and arrays) type.
-  */
+/**
+ * Node (JSX element like text, elements, and arrays) type.
+ */
 export type Node = Element | string | Node[];
- /**
-  * Function for generating elements.
-  */
-export type ElementGenerator<T extends Props = {}> = (props: T, children: Node[]) => Element;
+/**
+ * Function for generating elements.
+ */
+export type ElementGenerator<T extends Props = {}> = (
+    props: T,
+    children: Node[]
+) => Element;
 /**
  * Return type for the `jsxt.create` function.
  */
 export interface ExpressRenderer {
     (top: Element): string;
-    createHandler(component: ElementGenerator<{ req: ExpressRequest, res: ExpressResponse }>, status?: number): (req: ExpressRequest, res: ExpressResponse) => void;
+    createHandler(
+        component: ElementGenerator<{
+            req: ExpressRequest;
+            res: ExpressResponse;
+        }>,
+        status?: number
+    ): (req: ExpressRequest, res: ExpressResponse) => void;
 }
-import type { Request as ExpressRequest, Response as ExpressResponse } from "express";
-
-declare namespace JSX {
-    interface IntrinsicElements {
-        [key: string]: Element;
-    }
-}
+import type {
+    Request as ExpressRequest,
+    Response as ExpressResponse,
+} from "express";
 
 export default {
     createElement,
@@ -355,4 +422,12 @@ export default {
     Fragment,
     HtmlPage,
     create,
+};
+
+declare global {
+    export namespace JSX {
+        interface IntrinsicElements {
+            [key: string]: any;
+        }
+    }
 }
