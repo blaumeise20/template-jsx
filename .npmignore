@@ -5,6 +5,7 @@ node_modules.nosync/
 .gitignore
 src/
 tsconfig.json
+tsconfig.base.json
 *.map
-test/
+examples/
 dist/test/
