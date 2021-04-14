@@ -1,5 +1,5 @@
 {
-  "name": "jsxtemplate",
+  "name": "template-jsx",
   "version": "1.0.0",
   "description": "Template rendering engine for JSX",
   "main": "dist/index.js",
@@ -13,12 +13,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/blaumeise20/jsxtemplate.git"
+    "url": "git+https://github.com/blaumeise20/template-jsx.git"
   },
   "bugs": {
-    "url": "https://github.com/blaumeise20/jsxtemplate/issues"
+    "url": "https://github.com/blaumeise20/template-jsx/issues"
   },
-  "homepage": "https://github.com/blaumeise20/jsxtemplate#readme",
+  "homepage": "https://github.com/blaumeise20/template-jsx#readme",
   "author": "blaumeise20",
   "license": "MIT",
   "keywords": [

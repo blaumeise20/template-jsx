@@ -8,11 +8,11 @@ With this tool you can easily create templates and render them to a string. It u
 
 This is an npm package you can install in your project like this:
 ```
-npm install --save jsxtemplate
+npm install --save template-jsx
 ```
 This package is made for transpilers. So make sure to use either Babel or TypeScript. To correctly use the JSX functions, make sure to import the package in every file, like React:
 ```ts
-import * as jsxt from "jsxtemplate";
+import * as jsxt from "template-jsx";
 ```
 When you use TypeScript, you will have to set the `jsx` flag to `react` in your tsconfig.json file. You also have to specify the factory functions:
 ```json
