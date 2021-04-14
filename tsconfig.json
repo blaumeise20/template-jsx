@@ -1,20 +1,8 @@
 {
+    "extends": "./tsconfig.base.json",
     "compilerOptions": {
-        "module": "commonjs",
-        "outDir": "dist/",
-        "target": "es5",
-        "lib": [
-            "es2015"
-        ],
-        "noImplicitAny": false,
-        "noImplicitThis": false,
-        "alwaysStrict": true,
-        "strictBindCallApply": true,
-        "strictFunctionTypes": true,
-        "declaration": true,
-        "sourceMap": true,
-        "moduleResolution": "node",
-        "allowSyntheticDefaultImports": true
+        "outDir": "dist/"
     },
-    "include": ["src/"]
+    "include": ["src"],
+    "exclude": ["dist", "examples"]
 }

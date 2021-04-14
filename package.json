@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "Template rendering engine for JSX",
   "main": "dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "build:test": "tsc --build ./examples/tsconfig.examples.json",
+    "build:test": "tsc -p ./examples/tsconfig.json",
     "prepublish": "npm run build",
     "test": "npm run build:test && node ./dist/test/index.js",
     "test:express": "npm run build:test && node ./dist/test/express.js"
