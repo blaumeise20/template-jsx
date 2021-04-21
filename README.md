@@ -1,3 +1,4 @@
+![NPM Downloads](https://img.shields.io/npm/dw/template-jsx) [![NPM Link](https://img.shields.io/badge/NPM-Template--JSX-red)](https://www.npmjs.com/package/template-jsx)
 # JSX Templates
 
 > **An intuitive way of creating templates and rendering them using the JSX syntax**
