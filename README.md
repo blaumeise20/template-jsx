@@ -85,7 +85,7 @@ jsxt.render(app, { indent: true });
 
 ### Using it with express
 
-When this library is not made for frontend, whatelse would you need it for than webservers? This package has great support for express. There is an extra function called `create`, which takes the options and creates a renderer function. It has the `HtmlPage` component built-in, so if you don't pass one, it will automatically generate one. This is the basic usage:
+When this library is not made for frontend, what else would you need it for than webservers? This package has great support for express. There is an extra function called `create`, which takes the options and creates a renderer function. It has the `HtmlPage` component built-in, so if you don't pass one, it will automatically generate one. This is the basic usage:
 
 ```tsx
 const render = jsxt.create({
@@ -170,11 +170,11 @@ As you can see, there are `Case` elements nested in it. (Including a default cas
 
 ### Full list of options
 
--   `options.indent: boolean` - This option specifies if the resulting code should be formated and indented. If it is set to `false`, the whole output will be in one line.
+-   `options.indent: boolean` - This option specifies if the resulting code should be formatted and indented. If it is set to `false`, the whole output will be in one line.
 -   `options.indentSize: number` - Sets the amount of whitespaces used for indenting. Only used when `options.indent` is true.
 -   `options.indentString: string` - If you don't want to use whitespaces, if you want to use tabs for example, you can set this to your indentation string. If both `options.indentString` and `options.indentSize` are set, this one (`options.indentString`) will be preferred.
--   `options.useSelfCloseTags: boolean | string[]` - When you don't have children in an element, it will be outputed like `<div />`. If this is set to false, it will normally output both tags. If you even specify a list of strings, the self-closing will only be rendered for tags in that list. This is very useful when rendering web pages with `img` or `input` elements inside.
+-   `options.useSelfCloseTags: boolean | string[]` - When you don't have children in an element, it will be outputted like `<div />`. If this is set to false, it will normally output both tags. If you even specify a list of strings, the self-closing will only be rendered for tags in that list. This is very useful when rendering web pages with `img` or `input` elements inside.
 
 ## Licence
 
-This project is licenced under the MIT licence. Read it [here](LICENCE).
+This project is licensed under the MIT license. Read it [here](LICENSE).
