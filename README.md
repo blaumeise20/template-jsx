@@ -1,4 +1,4 @@
-![NPM Downloads](https://img.shields.io/npm/dw/template-jsx) [![NPM Link](https://img.shields.io/badge/NPM-Template--JSX-red)](https://www.npmjs.com/package/template-jsx)
+[![NPM Downloads](https://img.shields.io/npm/dw/template-jsx)](https://npm-stat.com/charts.html?package=template-jsx) [![NPM Link](https://img.shields.io/badge/NPM-Template--JSX-red)](https://www.npmjs.com/package/template-jsx)
 
 # JSX Templates
 
