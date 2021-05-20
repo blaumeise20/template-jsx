@@ -70,16 +70,19 @@ If you don't want the indent to be set to 4 spaces, you can change the amount wi
 When rendering HTML pages, there is a very helpful predefined component called `HtmlPage`. All attributes specified will be applied to the `html` tag in the output. The output also includes a `DOCTYPE` element. All children will be put into the `body` element:
 
 ```tsx
-const app = <div>sub elements</div>;
+const app = <HtmlPage>
+    <div>sub elements</div>
+</HtmlPage>;
 jsxt.render(app, { indent: false });
 /*
-<div>sub elements</div>
-*/
-jsxt.render(app, { indent: true });
-/*
-<div>
-    sub elements
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+    <div>sub elements</div>
+</body>
+</html>
 */
 ```
 
@@ -119,7 +122,7 @@ If you look at `options.useSelfCloseTags`, the `jsxt.create` function has the HT
 
 ### Special features
 
-Bored of writing crazy expressions for conditional elements? Then you can use the builtin `If` Component. It takes an expression and if that expression is true it outputs the elements.
+Bored of writing crazy expressions for conditional elements? Then you can use the built-in `If` Component. It takes an expression and if that expression is true it outputs the elements.
 
 ```tsx
 const MyApp: ElementGenerator = () => {
@@ -172,7 +175,7 @@ As you can see, there are `Case` elements nested in it. (Including a default cas
 
 -   `options.indent: boolean` - This option specifies if the resulting code should be formatted and indented. If it is set to `false`, the whole output will be in one line.
 -   `options.indentSize: number` - Sets the amount of whitespaces used for indenting. Only used when `options.indent` is true.
--   `options.indentString: string` - If you don't want to use whitespaces, if you want to use tabs for example, you can set this to your indentation string. If both `options.indentString` and `options.indentSize` are set, this one (`options.indentString`) will be preferred.
+-   `options.indentString: string` - If you don't want to use whitespaces, if you want to use tabs, for example, you can set this to your indentation string. If both `options.indentString` and `options.indentSize` are set, this one (`options.indentString`) will be preferred.
 -   `options.useSelfCloseTags: boolean | string[]` - When you don't have children in an element, it will be outputted like `<div />`. If this is set to false, it will normally output both tags. If you even specify a list of strings, the self-closing will only be rendered for tags in that list. This is very useful when rendering web pages with `img` or `input` elements inside.
 
 ## Licence
